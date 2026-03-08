@@ -544,7 +544,7 @@ struct EditIncomeSheet: View {
                             .foregroundColor(.brown)
                     }
 
-                    Text("If you're enjoying iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊")
+                    Text("If you're enjoyingxxxxxx iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊")
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
