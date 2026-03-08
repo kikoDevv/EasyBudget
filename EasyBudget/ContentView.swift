@@ -150,9 +150,9 @@ struct WelcomeView: View {
                 
                 // User input Name prompt --------------
                 CustomTextField(placeholder: "Enter your name", text: $userName)
-                    .frame(width: 250)
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 20)
+                    .frame(width: 250 )
+                    .padding(.horizontal,20)
+                    .padding(.bottom,20)
                     .scaleEffect(animationEffect ? 0 : 1)
                 
                 // User input Income prompt --------------
@@ -191,20 +191,12 @@ struct WelcomeView: View {
                 }) {
                     HStack(spacing: 8) {
                         Text("Start")
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                            .font(.system(size: 22, weight: .semibold))
                         Image(systemName: "arrow.right.circle.fill")
-                            .font(.system(size: 18))
+                            .font(.system(size: 28))
                     }
                     .foregroundColor(.white)
                     .frame(width: 250, height: 55)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
                     .cornerRadius(14)
                     .shadow(color: Color.blue.opacity(0.3), radius: 8, x: 0, y: 4)
                 }
@@ -786,7 +778,7 @@ struct CustomTextField: View {
         ZStack(alignment: .leading) {
             TextField("", text: $text)
                 .padding(.leading)
-                .frame(height: 55)
+                .frame(height: 50)
                 .focused($isTyping)
                 .background(
                     RoundedRectangle(cornerRadius: 14)
