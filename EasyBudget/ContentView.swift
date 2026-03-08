@@ -223,7 +223,7 @@ struct WelcomeView: View {
                             income = 0
                         }
                     }
-                ))
+                ), suffix: selectedLanguageCurrency.currencySymbol)
                 .frame(width: 250)
                 .padding(.horizontal, 30)
                 .scaleEffect(animationEffect ? 0 : 1)
@@ -880,20 +880,31 @@ struct CustomTextField: View {
     // Input fields ----
     let placeholder: String
     @Binding var text: String
+    var suffix: String? = nil
     @FocusState var isTyping: Bool
     
     var body: some View {
         ZStack(alignment: .leading) {
-            TextField("", text: $text)
-                .padding(.leading)
-                .frame(height: 50)
-                .focused($isTyping)
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 2)
-                        .background(Color.gray.opacity(0.5) .cornerRadius(10))
-                )
-                .foregroundStyle(isTyping ? .white : .white)
+            HStack {
+                TextField("", text: $text)
+                    .padding(.leading)
+                    .frame(height: 50)
+                    .focused($isTyping)
+                    .foregroundStyle(isTyping ? .white : .white)
+                
+                if let suffix = suffix, !text.isEmpty {
+                    Text(suffix)
+                        .foregroundColor(.white)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .padding(.trailing, 15)
+                }
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 2)
+                    .background(Color.gray.opacity(0.5).cornerRadius(10))
+            )
             
             Text(localizedString(placeholder))
                 .padding(.horizontal, 5)
