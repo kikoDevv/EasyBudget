@@ -144,29 +144,41 @@ struct WelcomeView: View {
             VStack {
                 Text("Welcome")
                     .scaleEffect(animationEffect ? 0 : 1)
-                // Name prompt
-                CustomTextField(placeholder: "Enter your name", text: $userName)
-                    .frame(width: 200)
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 10)
-                    .scaleEffect(animationEffect ? 0 : 1)
-                Text(income == 0 ? "Set your income" : "\(Int(income)) kr")
-                    .scaleEffect(animationEffect ? 0 : 1)
                     .font(.largeTitle)
-                    .padding(1)
-
-                Slider(value: $income, in: 0...70000, step: 500)
-                    .tint(.white)
-                    .scaleEffect(animationEffect ? 0 : 1)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 30)
+                
+                // User input Name prompt --------------
+                CustomTextField(placeholder: "Enter your name", text: $userName)
+                    .frame(width: 250)
                     .padding(.horizontal, 30)
-                    .padding(.vertical, 30)
-                    .onChange(of: income) { _ in
-                        #if os(iOS)
-                        feedbackGenerator.impactOccurred()
-                        #endif
+                    .padding(.bottom, 20)
+                    .scaleEffect(animationEffect ? 0 : 1)
+                
+                // User input Income prompt --------------
+                CustomTextField(placeholder: "Set your income", text: Binding(
+                    get: { income > 0 ? String(Int(income)) : "" },
+                    set: { newValue in
+                        if let value = Float(newValue) {
+                            income = value
+                        } else if newValue.isEmpty {
+                            income = 0
+                        }
                     }
+                ))
+                .frame(width: 250)
+                .padding(.horizontal, 30)
+                .scaleEffect(animationEffect ? 0 : 1)
+                #if os(iOS)
+                .keyboardType(.numberPad)
+                #endif
 
-                Button("Start") {
+                Button(action: {
+                    #if os(iOS)
+                    let generator = UIImpactFeedbackGenerator(style: .medium)
+                    generator.impactOccurred()
+                    #endif
+                    
                     UserDefaults.standard.set(income, forKey: "inkomst")
                     UserDefaults.standard.set(userName, forKey: "userName")
                     withAnimation {
@@ -176,14 +188,30 @@ struct WelcomeView: View {
                         showMainView = false
                         showSecondView = true
                     }
+                }) {
+                    HStack(spacing: 8) {
+                        Text("Start")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        Image(systemName: "arrow.right.circle.fill")
+                            .font(.system(size: 18))
+                    }
+                    .foregroundColor(.white)
+                    .frame(width: 250, height: 55)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(14)
+                    .shadow(color: Color.blue.opacity(0.3), radius: 8, x: 0, y: 4)
                 }
                 .scaleEffect(animationEffect ? 0 : 1)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .foregroundColor(.black)
-                .background(Color.white)
-                .cornerRadius(10)
-                .disabled(userName.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(userName.trimmingCharacters(in: .whitespaces).isEmpty || income == 0)
+                .opacity((userName.trimmingCharacters(in: .whitespaces).isEmpty || income == 0) ? 0.6 : 1.0)
+                .padding(.top, 20)
             }
         }
         .onAppear {
@@ -749,25 +777,36 @@ func localizedString(_ key: String) -> String {
 }
 
 struct CustomTextField: View {
+    // Input fields ----
     let placeholder: String
     @Binding var text: String
-
+    @FocusState var isTyping: Bool
+    
     var body: some View {
         ZStack(alignment: .leading) {
-            if text.isEmpty {
-                Text(localizedString(placeholder))
-                    .foregroundColor(.black)
-                    .padding(.horizontal, 10)
-            }
             TextField("", text: $text)
-                .foregroundColor(.blue)
+                .padding(.leading)
+                .frame(height: 55)
+                .focused($isTyping)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 2)
+                        .background(Color.gray.opacity(0.5) .cornerRadius(10))
+                )
+                .foregroundStyle(isTyping ? .white : .white)
+            
+            Text(localizedString(placeholder))
+                .padding(.horizontal, 5)
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(isTyping || !text.isEmpty ? Color.blue : Color.clear)
+                )
+                .foregroundStyle(.white)
+                .padding(.leading)
+                .offset(y: isTyping || !text.isEmpty ? -27 : 0)
+                .font(.caption)
         }
-        .padding(10)
-        .background(Color.white)
-        .cornerRadius(10)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.blue, lineWidth: 1)
-        )
+        .animation(.linear(duration: 0.2), value: isTyping)
+        .animation(.linear(duration: 0.2), value: text.isEmpty)
     }
 }
