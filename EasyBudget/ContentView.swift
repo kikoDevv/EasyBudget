@@ -142,9 +142,13 @@ struct ContentView: View {
                 )
             }
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            #if os(iOS)
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            #endif
+        }
     }
-
-    // MARK: - Helper Methods
     private func saveExpense() {
         if let value = Int(inputValue) {
             expenses[inputKey] = value
@@ -457,10 +461,15 @@ struct BudgetView: View {
                 }
             }
         }
+        .onTapGesture {
+            #if os(iOS)
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            #endif
+        }
     }
 }
 
-// MARK: - Budget Summary View
+// -------------- Budget Summary View --------------------
 struct BudgetSummaryView: View {
     let income: Float
     let expenses: [String:Int]
@@ -750,10 +759,15 @@ struct EditIncomeSheet: View {
                 }
             }
         }
+        .onTapGesture {
+            #if os(iOS)
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            #endif
+        }
     }
 }
 
-// MARK: - Add Expense Sheet
+//-------------------------------Expand Sheet-------------------------------
 struct AddExpenseSheet: View {
     @Binding var inputKey: String
     @Binding var inputValue: String
@@ -949,8 +963,13 @@ struct AddExpenseSheet: View {
         #if os(iOS)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .presentationCornerRadius(24)
+        .presentationCornerRadius(43)
         #endif
+        .onTapGesture {
+            #if os(iOS)
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            #endif
+        }
     }
 }
 
@@ -1030,7 +1049,7 @@ struct CustomTextField: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 2)
+                    .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 1)
                     .background(Color.gray.opacity(0.5).cornerRadius(10))
             )
 
