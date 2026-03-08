@@ -466,6 +466,7 @@ struct BudgetSummaryView: View {
     let expenses: [String:Int]
     let currencySymbol: String
     var languageCode: String = "en"
+    @State private var animateProgress = false
 
     private var totalExpenses: Int {
         expenses.values.reduce(0, +)
@@ -519,7 +520,7 @@ struct BudgetSummaryView: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(Int(income)) \(currencySymbol)")
+                        Text(formattedAmount(Int(income), currencySymbol: currencySymbol))
                     } icon: {
                         Image(systemName: "arrow.down.circle.fill")
                             .foregroundColor(.green)
@@ -533,7 +534,7 @@ struct BudgetSummaryView: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(totalExpenses) \(currencySymbol)")
+                        Text(formattedAmount(totalExpenses, currencySymbol: currencySymbol))
                     } icon: {
                         Text("💸")
                     }
@@ -551,8 +552,9 @@ struct BudgetSummaryView: View {
                             .foregroundColor(.white)
 
                         RoundedRectangle(cornerRadius: 20)
-                            .frame(width: geometry.size.width * min(spendingPercentage, 1), height: 10)
+                            .frame(width: geometry.size.width * (animateProgress ? min(spendingPercentage, 1) : 0), height: 10)
                             .foregroundColor(progressBarColor)
+                            .animation(.easeOut(duration: 0.8), value: animateProgress)
                     }
 
                     Text(progressBarText)
@@ -562,6 +564,7 @@ struct BudgetSummaryView: View {
             }
             .frame(height: 30)
             .padding(.vertical, 5)
+            .onAppear { animateProgress = true }
 
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
@@ -570,7 +573,8 @@ struct BudgetSummaryView: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(savings) \(currencySymbol)")
+                        Text(formattedAmount(savings, currencySymbol: currencySymbol))
+                            .foregroundColor(savings >= 0 ? .green : .red)
                     } icon: {
                         Text("💰")
                     }
@@ -583,7 +587,8 @@ struct BudgetSummaryView: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(yearlySavings) \(currencySymbol)")
+                        Text(formattedAmount(yearlySavings, currencySymbol: currencySymbol))
+                            .foregroundColor(yearlySavings >= 0 ? .green : .red)
                     } icon: {
                         Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                             .foregroundColor(.purple)
@@ -627,18 +632,21 @@ struct EditIncomeSheet: View {
                     .padding(.horizontal, 30)
                     .padding(.bottom, 10)
 
-                Text("\(Int(income)) \(selectedLanguageCurrency.currencySymbol)")
-                    .font(.title)
-                    .foregroundColor(.green)
-
-                Slider(value: $income, in: 0...70000, step: 1000)
-                    .padding(.horizontal)
-                    .tint(.green)
-                    .onChange(of: income) { _ in
-                        #if os(iOS)
-                        feedbackGenerator.impactOccurred()
-                        #endif
+                CustomTextField(placeholder: "Set your income", text: Binding(
+                    get: { income > 0 ? String(Int(income)) : "" },
+                    set: { newValue in
+                        if let value = Float(newValue) {
+                            income = value
+                        } else if newValue.isEmpty {
+                            income = 0
+                        }
                     }
+                ), suffix: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode)
+                .frame(width: 200)
+                .padding(.horizontal, 30)
+                #if os(iOS)
+                .keyboardType(.numberPad)
+                #endif
 
                 // Language and Currency Picker
                 VStack(alignment: .leading, spacing: 8) {
@@ -793,7 +801,7 @@ struct AddExpenseSheet: View {
                             .padding(.horizontal, 30)
                         #endif
                     } else {
-                        Text("\(localizedString("Amount:", languageCode: languageCode)) \(Int(sliderValue)) \(currencySymbol)")
+                        Text("\(localizedString("Amount:", languageCode: languageCode)) \(formattedAmount(Int(sliderValue), currencySymbol: currencySymbol))")
                             .font(.headline)
                             .foregroundColor(.green)
                         Slider(value: $sliderValue, in: 0...20000, step: 100)
@@ -865,6 +873,15 @@ struct BlueTextFieldStyle: TextFieldStyle {
             )
             .foregroundColor(.black)
     }
+}
+
+// MARK: - Number Formatting Helper
+func formattedAmount(_ value: Int, currencySymbol: String) -> String {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    formatter.groupingSeparator = " "
+    let formatted = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    return "\(formatted) \(currencySymbol)"
 }
 
 // MARK: - Localization Helper
