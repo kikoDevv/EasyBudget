@@ -763,62 +763,176 @@ struct AddExpenseSheet: View {
     let languageCode: String
 
     @State private var selectedCategory: ExpenseCategory? = nil
-    @State private var sliderValue: Double = 0
+    @State private var amountText: String = ""
+    @State private var appearAnimation = false
     #if os(iOS)
     @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     #endif
 
+    private let columns = [
+        GridItem(.adaptive(minimum: 72, maximum: 90), spacing: 10)
+    ]
+
+    private var isSaveDisabled: Bool {
+        selectedCategory == nil || (selectedCategory?.name == "Other"
+            ? (inputKey.isEmpty || inputValue.isEmpty)
+            : inputValue.isEmpty)
+    }
+
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Picker("Category", selection: $selectedCategory) {
-                    ForEach(predefinedCategories) { category in
-                        HStack {
-                            Image(systemName: category.icon)
-                            Text(category.name)
-                        }.tag(category as ExpenseCategory?)
-                    }
-                }
-                #if os(iOS)
-                .pickerStyle(.wheel)
-                #endif
-                .padding(.horizontal)
-
+            VStack(spacing: 0) {
+                // Selected category hero
                 if let selected = selectedCategory {
-                    if selected.name == "Other" {
-                        CustomTextField(placeholder: "Enter category", text: $inputKey, languageCode: languageCode)
-                            .frame(width: 200)
-                            .padding(.horizontal, 30)
-                            .padding(.bottom, 10)
-                        #if os(iOS)
-                        CustomTextField(placeholder: "Enter amount", text: $inputValue, suffix: currencySymbol, languageCode: languageCode)
-                            .frame(width: 200)
-                            .padding(.horizontal, 30)
-                            .keyboardType(.numberPad)
-                        #else
-                        CustomTextField(placeholder: "Enter amount", text: $inputValue, suffix: currencySymbol, languageCode: languageCode)
-                            .frame(width: 200)
-                            .padding(.horizontal, 30)
-                        #endif
-                    } else {
-                        Text("\(localizedString("Amount:", languageCode: languageCode)) \(formattedAmount(Int(sliderValue), currencySymbol: currencySymbol))")
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(colors: [.blue, .blue.opacity(0.6)],
+                                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                                .frame(width: 64, height: 64)
+                                .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
+
+                            Image(systemName: selected.icon)
+                                .font(.system(size: 26, weight: .medium))
+                                .foregroundColor(.white)
+                        }
+                        .scaleEffect(appearAnimation ? 1 : 0.5)
+                        .opacity(appearAnimation ? 1 : 0)
+
+                        Text(selected.name)
                             .font(.headline)
-                            .foregroundColor(.green)
-                        Slider(value: $sliderValue, in: 0...20000, step: 100)
-                            .tint(.green)
-                            .padding(.horizontal, 30)
-                            .onChange(of: sliderValue) { newValue in
-                                inputValue = String(Int(newValue))
-                                #if os(iOS)
-                                feedbackGenerator.impactOccurred()
-                                #endif
-                            }
+                            .foregroundColor(.primary)
                     }
+                    .padding(.top, 16)
+                    .padding(.bottom, 8)
+                    .transition(.scale.combined(with: .opacity))
                 }
 
-                Spacer()
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Amount input area
+                        if let selected = selectedCategory {
+                            VStack(spacing: 14) {
+                                if selected.name == "Other" {
+                                    CustomTextField(placeholder: "Enter category", text: $inputKey, languageCode: languageCode)
+                                        .frame(width: 280)
+                                }
+
+                                CustomTextField(
+                                    placeholder: "Enter amount",
+                                    text: selected.name == "Other" ? $inputValue : $amountText,
+                                    suffix: currencySymbol,
+                                    languageCode: languageCode
+                                )
+                                .frame(width: 280)
+                                #if os(iOS)
+                                .keyboardType(.numberPad)
+                                #endif
+                                .onChange(of: amountText) { newValue in
+                                    if selected.name != "Other" {
+                                        inputValue = newValue
+                                    }
+                                }
+                            }
+                            .padding(.top, 8)
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        }
+
+                        // Category grid
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(localizedString("Category", languageCode: languageCode))
+                                .font(.footnote)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                                .padding(.horizontal, 4)
+
+                            LazyVGrid(columns: columns, spacing: 10) {
+                                ForEach(Array(predefinedCategories.enumerated()), id: \.element.id) { index, category in
+                                    let isSelected = selectedCategory == category
+                                    Button {
+                                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                            selectedCategory = category
+                                            appearAnimation = true
+                                        }
+                                        #if os(iOS)
+                                        feedbackGenerator.impactOccurred()
+                                        #endif
+                                    } label: {
+                                        VStack(spacing: 5) {
+                                            Image(systemName: category.icon)
+                                                .font(.system(size: 20))
+                                                .frame(width: 44, height: 44)
+                                                .background(
+                                                    Circle()
+                                                        .fill(isSelected
+                                                              ? Color.blue
+                                                              : Color(.systemGray5))
+                                                )
+                                                .foregroundColor(isSelected ? .white : .primary)
+                                            Text(category.name)
+                                                .font(.system(size: 10, weight: .medium))
+                                                .lineLimit(1)
+                                                .foregroundColor(isSelected ? .blue : .secondary)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 6)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .fill(isSelected ? Color.blue.opacity(0.08) : Color.clear)
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                    .scaleEffect(isSelected ? 1.05 : 1.0)
+                                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    .padding(.top, 8)
+                    .padding(.bottom, 30)
+                }
+
+                // Bottom save button
+                VStack(spacing: 0) {
+                    Divider()
+                    Button {
+                        if let cat = selectedCategory {
+                            if cat.name == "Other" {
+                                inputKey = "cart.fill " + inputKey
+                            } else {
+                                inputKey = cat.icon + " " + cat.name
+                            }
+                        }
+                        onSave()
+                    } label: {
+                        Text(localizedString("Save", languageCode: languageCode))
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: isSaveDisabled
+                                                ? [Color.gray.opacity(0.4), Color.gray.opacity(0.4)]
+                                                : [Color.blue, Color.blue.opacity(0.8)],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                            )
+                    }
+                    .disabled(isSaveDisabled)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                }
             }
-            .padding(.top)
             #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -827,29 +941,15 @@ struct AddExpenseSheet: View {
                         inputValue = ""
                         showAddView = false
                     }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(localizedString("Save", languageCode: languageCode)) {
-                        if let cat = selectedCategory {
-                            if cat.name == "Other" {
-                                // Prepend buying basket icon for custom category
-                                inputKey = "cart.fill " + inputKey
-                            } else {
-                                inputKey = cat.icon + " " + cat.name
-                            }
-                        }
-                        onSave()
-                    }
-                    .disabled(selectedCategory == nil || (selectedCategory?.name == "Other" ? (inputKey.isEmpty || inputValue.isEmpty) : inputValue.isEmpty))
+                    .foregroundColor(.secondary)
                 }
             }
             #endif
         }
         #if os(iOS)
-        .frame(maxHeight: UIScreen.main.bounds.height * 0.6)
-        .background(Color(.systemBackground))
-        .cornerRadius(20)
-        .shadow(radius: 10)
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(24)
         #endif
     }
 }
