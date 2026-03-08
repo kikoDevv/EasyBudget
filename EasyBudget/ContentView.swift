@@ -738,7 +738,7 @@ struct BlueTextFieldStyle: TextFieldStyle {
 func localizedString(_ key: String) -> String {
     let preferredLanguage = Locale.preferredLanguages.first ?? "en"
     let isSwedish = preferredLanguage.hasPrefix("sv")
-    let isEnglish = preferredLanguage.hasPrefix("en")
+    _ = preferredLanguage.hasPrefix("en")
 
     // If the language is not Swedish or English, force English
     let language = isSwedish ? "sv" : "en"
