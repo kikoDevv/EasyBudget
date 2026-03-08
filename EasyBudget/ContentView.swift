@@ -12,9 +12,9 @@ enum LanguageCurrency: String, CaseIterable, Identifiable {
     case english = "English USD"
     case norwegian = "Norwegian NOK"
     case euro = "Euro EUR"
-    
+
     var id: String { self.rawValue }
-    
+
     var flag: String {
         switch self {
         case .swedish: return "🇸🇪"
@@ -23,29 +23,29 @@ enum LanguageCurrency: String, CaseIterable, Identifiable {
         case .euro: return "🇪🇺"
         }
     }
-    
+
     var displayName: String {
         return "\(flag) \(rawValue)"
     }
-    
+
     var languageCode: String {
         switch self {
         case .swedish: return "sv"
         case .english: return "en"
-        case .norwegian: return "no"
+        case .norwegian: return "nb"
         case .euro: return "en"
         }
     }
-    
+
     var currencySymbol: String {
         switch self {
         case .swedish: return "kr"
         case .english: return "$"
-        case .norwegian: return "kr"
+        case .norwegian: return "NOK"
         case .euro: return "€"
         }
     }
-    
+
     var currencyCode: String {
         switch self {
         case .swedish: return "SEK"
@@ -200,19 +200,19 @@ struct WelcomeView: View {
                 .offset(y: 100)
                 .foregroundColor(Color.black)
 
-            VStack(spacing: 15) {
-                Text("Welcome")
+            VStack(spacing: 10) {
+                Text(localizedString("Welcome", languageCode: selectedLanguageCurrency.languageCode))
                     .scaleEffect(animationEffect ? 0 : 1)
                     .font(.largeTitle)
                     .foregroundColor(.white)
-                    .padding(.bottom, 20)
-                
+                    .padding(.bottom, 10)
+
                 // User input Name prompt --------------
-                CustomTextField(placeholder: "Enter your name", text: $userName)
+                CustomTextField(placeholder: "Enter your name", text: $userName, languageCode: selectedLanguageCurrency.languageCode)
                     .frame(width: 250)
-                    .padding(.horizontal, 20)
+                    .padding(.bottom, 10)
                     .scaleEffect(animationEffect ? 0 : 1)
-                
+
                 // User input Income prompt --------------
                 CustomTextField(placeholder: "Set your income", text: Binding(
                     get: { income > 0 ? String(Int(income)) : "" },
@@ -223,21 +223,20 @@ struct WelcomeView: View {
                             income = 0
                         }
                     }
-                ), suffix: selectedLanguageCurrency.currencySymbol)
+                ), suffix: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode)
                 .frame(width: 250)
-                .padding(.horizontal, 30)
                 .scaleEffect(animationEffect ? 0 : 1)
                 #if os(iOS)
                 .keyboardType(.numberPad)
                 #endif
-                
+
                 // Language and Currency Picker --------------
                 VStack(spacing: 8) {
-                    Text("Select Language and Currency")
+                    Text(localizedString("Language and Currency", languageCode: selectedLanguageCurrency.languageCode))
                         .font(.caption)
                         .foregroundColor(.white)
                         .bold()
-                    
+
                     Picker("Language and Currency", selection: $selectedLanguageCurrency) {
                         ForEach(LanguageCurrency.allCases) { option in
                             Text(option.displayName).tag(option)
@@ -259,7 +258,7 @@ struct WelcomeView: View {
                     let generator = UIImpactFeedbackGenerator(style: .medium)
                     generator.impactOccurred()
                     #endif
-                    
+
                     UserDefaults.standard.set(income, forKey: "inkomst")
                     UserDefaults.standard.set(userName, forKey: "userName")
                     UserDefaults.standard.set(selectedLanguageCurrency.rawValue, forKey: "languageCurrency")
@@ -272,7 +271,7 @@ struct WelcomeView: View {
                     }
                 }) {
                     HStack(spacing: 8) {
-                        Text("Start")
+                        Text(localizedString("Start", languageCode: selectedLanguageCurrency.languageCode))
                             .font(.system(size: 22, weight: .semibold))
                         Image(systemName: "arrow.right.circle.fill")
                             .font(.system(size: 28))
@@ -318,7 +317,7 @@ struct BudgetView: View {
                     if !userName.isEmpty {
                         HStack(alignment: .center) {
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("Hello,")
+                                Text(localizedString("Hello,", languageCode: selectedLanguageCurrency.languageCode))
                                     .font(.title3)
                                     .foregroundColor(.gray)
                                 Text(userName)
@@ -340,14 +339,14 @@ struct BudgetView: View {
                         .padding(.bottom, 8)
                     }
                     List {
-                        BudgetSummaryView(income: income, expenses: expenses)
+                        BudgetSummaryView(income: income, expenses: expenses, currencySymbol: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode)
                         Section(header:
                             HStack {
-                                Text("Expenses")
+                                Text(localizedString("Expenses", languageCode: selectedLanguageCurrency.languageCode))
                                     .font(.headline)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Button(isEditingCategories ? "Done" : "Edit") {
+                                Button(isEditingCategories ? localizedString("Done", languageCode: selectedLanguageCurrency.languageCode) : localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode)) {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                         isEditingCategories.toggle()
                                     }
@@ -388,7 +387,7 @@ struct BudgetView: View {
                                         Text(key)
                                     }
                                     Spacer()
-                                    Text("\(value) kr")
+                                    Text("\(value) \(selectedLanguageCurrency.currencySymbol)")
                                         .foregroundColor(.secondary)
                                     if isEditingCategories {
                                         Button(action: {
@@ -423,7 +422,9 @@ struct BudgetView: View {
                             inputKey: $inputKey,
                             inputValue: $inputValue,
                             showAddView: $showAddView,
-                            onSave: onSave
+                            onSave: onSave,
+                            currencySymbol: selectedLanguageCurrency.currencySymbol,
+                            languageCode: selectedLanguageCurrency.languageCode
                         )
                     }
                     .sheet(isPresented: $showEditView) {
@@ -463,6 +464,8 @@ struct BudgetView: View {
 struct BudgetSummaryView: View {
     let income: Float
     let expenses: [String:Int]
+    let currencySymbol: String
+    var languageCode: String = "en"
 
     private var totalExpenses: Int {
         expenses.values.reduce(0, +)
@@ -497,13 +500,13 @@ struct BudgetSummaryView: View {
     private var progressBarText: String {
         switch spendingPercentage {
         case 0..<0.5:
-            return localizedString("Great! You're saving a lot")
+            return localizedString("Great! You're saving a lot", languageCode: languageCode)
         case 0.5..<0.7:
-            return localizedString("Good! You're still saving")
+            return localizedString("Good! You're still saving", languageCode: languageCode)
         case 0.7..<0.9:
-            return localizedString("Warning! You're spending a lot")
+            return localizedString("Warning! You're spending a lot", languageCode: languageCode)
         default:
-            return localizedString("Danger! You're spending almost everything")
+            return localizedString("Danger! You're spending almost everything", languageCode: languageCode)
         }
     }
 
@@ -511,12 +514,12 @@ struct BudgetSummaryView: View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Monthly Income")
+                    Text(localizedString("Monthly Income", languageCode: languageCode))
                         .font(.caption)
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(Int(income)) kr")
+                        Text("\(Int(income)) \(currencySymbol)")
                     } icon: {
                         Image(systemName: "arrow.down.circle.fill")
                             .foregroundColor(.green)
@@ -525,12 +528,12 @@ struct BudgetSummaryView: View {
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Monthly Spent")
+                    Text(localizedString("Monthly Spent", languageCode: languageCode))
                         .font(.caption)
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(totalExpenses) kr")
+                        Text("\(totalExpenses) \(currencySymbol)")
                     } icon: {
                         Text("💸")
                     }
@@ -562,12 +565,12 @@ struct BudgetSummaryView: View {
 
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Monthly Saved")
+                    Text(localizedString("Monthly Saved", languageCode: languageCode))
                         .font(.caption)
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(savings) kr")
+                        Text("\(savings) \(currencySymbol)")
                     } icon: {
                         Text("💰")
                     }
@@ -575,12 +578,12 @@ struct BudgetSummaryView: View {
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Yearly Saved")
+                    Text(localizedString("Yearly Saved", languageCode: languageCode))
                         .font(.caption)
                         .foregroundColor(.gray)
                         .padding(.leading, 25)
                     Label {
-                        Text("\(yearlySavings) kr")
+                        Text("\(yearlySavings) \(currencySymbol)")
                     } icon: {
                         Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                             .foregroundColor(.purple)
@@ -616,10 +619,10 @@ struct EditIncomeSheet: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("Edit your name and income")
+                Text(localizedString("Edit your name and income", languageCode: selectedLanguageCurrency.languageCode))
                     .font(.headline)
 
-                CustomTextField(placeholder: "Enter your name", text: $userName)
+                CustomTextField(placeholder: "Enter your name", text: $userName, languageCode: selectedLanguageCurrency.languageCode)
                     .frame(width: 200)
                     .padding(.horizontal, 30)
                     .padding(.bottom, 10)
@@ -639,11 +642,11 @@ struct EditIncomeSheet: View {
 
                 // Language and Currency Picker
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Select Language and Currency")
+                    Text(localizedString("Language and Currency", languageCode: selectedLanguageCurrency.languageCode))
                         .font(.headline)
                         .foregroundColor(.primary)
                         .padding(.horizontal)
-                    
+
                     Picker("Language and Currency", selection: $selectedLanguageCurrency) {
                         ForEach(LanguageCurrency.allCases) { option in
                             Text(option.displayName).tag(option)
@@ -664,14 +667,14 @@ struct EditIncomeSheet: View {
                 // Support Developer Section
                 VStack(spacing: 12) {
                     HStack(spacing: 8) {
-                        Text("Support the Developer")
+                        Text(localizedString("Support the Developer", languageCode: selectedLanguageCurrency.languageCode))
                             .font(.headline)
                             .foregroundColor(.blue)
                         Image(systemName: "cup.and.saucer.fill")
                             .foregroundColor(.brown)
                     }
 
-                    Text("If you're enjoyingxxxxxx iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊")
+                    Text(localizedString("If you're enjoying iBudget and would like to support the development, consider buying me a coffee.", languageCode: selectedLanguageCurrency.languageCode))
                         .font(.subheadline)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
@@ -680,7 +683,7 @@ struct EditIncomeSheet: View {
                         HStack {
                             Image(systemName: "envelope.fill")
                                 .foregroundColor(.blue)
-                            Text("Email:")
+                            Text(localizedString("Email:", languageCode: selectedLanguageCurrency.languageCode))
                                 .foregroundColor(.gray)
                             Text("kiko.devv@gmail.com")
                                 .foregroundColor(.blue)
@@ -690,7 +693,7 @@ struct EditIncomeSheet: View {
                         HStack {
                             Image(systemName: "dollarsign.circle.fill")
                                 .foregroundColor(.blue)
-                            Text("PayPal:")
+                            Text(localizedString("PayPal:", languageCode: selectedLanguageCurrency.languageCode))
                                 .foregroundColor(.gray)
                             Text("Nasrolla.hassani@gmail.com")
                                 .foregroundColor(.blue)
@@ -700,7 +703,7 @@ struct EditIncomeSheet: View {
                         HStack {
                             Image(systemName: "swedishkronasign.circle.fill")
                                 .foregroundColor(.blue)
-                            Text("Swish:")
+                            Text(localizedString("Swish:", languageCode: selectedLanguageCurrency.languageCode))
                                 .foregroundColor(.gray)
                             Text("072-4499699")
                                 .foregroundColor(.blue)
@@ -725,12 +728,12 @@ struct EditIncomeSheet: View {
             .padding(.top)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(localizedString("Cancel", languageCode: selectedLanguageCurrency.languageCode)) {
                         showEditView = false
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(localizedString("Save", languageCode: selectedLanguageCurrency.languageCode)) {
                         UserDefaults.standard.set(income, forKey: "inkomst")
                         UserDefaults.standard.set(userName, forKey: "userName")
                         UserDefaults.standard.set(selectedLanguageCurrency.rawValue, forKey: "languageCurrency")
@@ -748,6 +751,8 @@ struct AddExpenseSheet: View {
     @Binding var inputValue: String
     @Binding var showAddView: Bool
     let onSave: () -> Void
+    let currencySymbol: String
+    let languageCode: String
 
     @State private var selectedCategory: ExpenseCategory? = nil
     @State private var sliderValue: Double = 0
@@ -773,22 +778,22 @@ struct AddExpenseSheet: View {
 
                 if let selected = selectedCategory {
                     if selected.name == "Other" {
-                        CustomTextField(placeholder: "Enter category", text: $inputKey)
+                        CustomTextField(placeholder: "Enter category", text: $inputKey, languageCode: languageCode)
                             .frame(width: 200)
                             .padding(.horizontal, 30)
                             .padding(.bottom, 10)
                         #if os(iOS)
-                        CustomTextField(placeholder: "Enter amount", text: $inputValue)
+                        CustomTextField(placeholder: "Enter amount", text: $inputValue, suffix: currencySymbol, languageCode: languageCode)
                             .frame(width: 200)
                             .padding(.horizontal, 30)
                             .keyboardType(.numberPad)
                         #else
-                        CustomTextField(placeholder: "Enter amount", text: $inputValue)
+                        CustomTextField(placeholder: "Enter amount", text: $inputValue, suffix: currencySymbol, languageCode: languageCode)
                             .frame(width: 200)
                             .padding(.horizontal, 30)
                         #endif
                     } else {
-                        Text("Amount: \(Int(sliderValue)) kr")
+                        Text("\(localizedString("Amount:", languageCode: languageCode)) \(Int(sliderValue)) \(currencySymbol)")
                             .font(.headline)
                             .foregroundColor(.green)
                         Slider(value: $sliderValue, in: 0...20000, step: 100)
@@ -809,14 +814,14 @@ struct AddExpenseSheet: View {
             #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(localizedString("Cancel", languageCode: languageCode)) {
                         inputKey = ""
                         inputValue = ""
                         showAddView = false
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(localizedString("Save", languageCode: languageCode)) {
                         if let cat = selectedCategory {
                             if cat.name == "Other" {
                                 // Prepend buying basket icon for custom category
@@ -863,13 +868,18 @@ struct BlueTextFieldStyle: TextFieldStyle {
 }
 
 // MARK: - Localization Helper
-func localizedString(_ key: String) -> String {
-    let preferredLanguage = Locale.preferredLanguages.first ?? "en"
-    let isSwedish = preferredLanguage.hasPrefix("sv")
-    _ = preferredLanguage.hasPrefix("en")
+func localizedString(_ key: String, languageCode: String? = nil) -> String {
+    let language: String
 
-    // If the language is not Swedish or English, force English
-    let language = isSwedish ? "sv" : "en"
+    if let languageCode = languageCode {
+        // Use the provided language code
+        language = languageCode
+    } else {
+        // Fall back to system language
+        let preferredLanguage = Locale.preferredLanguages.first ?? "en"
+        let isSwedish = preferredLanguage.hasPrefix("sv")
+        language = isSwedish ? "sv" : "en"
+    }
 
     let path = Bundle.main.path(forResource: language, ofType: "lproj") ?? Bundle.main.path(forResource: "en", ofType: "lproj")!
     let bundle = Bundle(path: path)!
@@ -881,8 +891,9 @@ struct CustomTextField: View {
     let placeholder: String
     @Binding var text: String
     var suffix: String? = nil
+    var languageCode: String? = nil
     @FocusState var isTyping: Bool
-    
+
     var body: some View {
         ZStack(alignment: .leading) {
             HStack {
@@ -891,7 +902,7 @@ struct CustomTextField: View {
                     .frame(height: 50)
                     .focused($isTyping)
                     .foregroundStyle(isTyping ? .white : .white)
-                
+
                 if let suffix = suffix, !text.isEmpty {
                     Text(suffix)
                         .foregroundColor(.white)
@@ -905,8 +916,8 @@ struct CustomTextField: View {
                     .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 2)
                     .background(Color.gray.opacity(0.5).cornerRadius(10))
             )
-            
-            Text(localizedString(placeholder))
+
+            Text(localizedString(placeholder, languageCode: languageCode))
                 .padding(.horizontal, 5)
                 .background(
                     RoundedRectangle(cornerRadius: 5)

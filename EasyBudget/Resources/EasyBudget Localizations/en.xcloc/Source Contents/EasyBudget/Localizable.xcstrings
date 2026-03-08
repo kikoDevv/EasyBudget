@@ -36,18 +36,6 @@
             "state" : "translated",
             "value" : "%lld $"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NOK"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kr"
-          }
         }
       }
     },
@@ -58,18 +46,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld $ :-"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NOK :-"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld kr"
           }
         }
       }
@@ -94,18 +70,6 @@
             "state" : "translated",
             "value" : "Amount"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beløp"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Belopp"
-          }
         }
       }
     },
@@ -116,18 +80,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Amount: %d $"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beløp"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Belopp: %d kr"
           }
         }
       }
@@ -140,18 +92,6 @@
             "state" : "translated",
             "value" : "Amount: %lld $"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beløp"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Belopp: %lld kr"
-          }
         }
       }
     },
@@ -162,18 +102,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancel"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kansellere"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "avbryt"
           }
         }
       }
@@ -186,18 +114,6 @@
             "state" : "translated",
             "value" : "Category"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kategori"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kategori"
-          }
         }
       }
     },
@@ -208,18 +124,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Category name"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kategorinavn"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kategorinamn"
           }
         }
       }
@@ -232,18 +136,6 @@
             "state" : "translated",
             "value" : "Danger! You're spending almost everything"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fare! Du bruker nesten alt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Akut! Du använder nästan allt"
-          }
         }
       }
     },
@@ -254,18 +146,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Done"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ferdig"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klart"
           }
         }
       }
@@ -278,18 +158,6 @@
             "state" : "translated",
             "value" : "Edit"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redigere"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redigera"
-          }
         }
       }
     },
@@ -300,18 +168,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit your name and income"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rediger navn og inntekt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redigera ditt namn och inkomst"
           }
         }
       }
@@ -324,18 +180,6 @@
             "state" : "translated",
             "value" : "Enter amount"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angi beløp"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ange belopp"
-          }
         }
       }
     },
@@ -346,18 +190,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enter category"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skriv inn kategori"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ange kategori"
           }
         }
       }
@@ -370,18 +202,6 @@
             "state" : "translated",
             "value" : "Enter your name"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skriv inn navnet ditt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ange ditt namn"
-          }
         }
       }
     },
@@ -392,18 +212,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expenses"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utgifter"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utgifter"
           }
         }
       }
@@ -416,18 +224,6 @@
             "state" : "translated",
             "value" : "Good! You're still saving"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bra! Du sparer fortsatt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toppen! Ditt sparande fortsätter starkt"
-          }
         }
       }
     },
@@ -438,18 +234,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Great! You're saving a lot"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Flott! Du sparer mye"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Strålande! Du sparar rejält"
           }
         }
       }
@@ -462,18 +246,6 @@
             "state" : "translated",
             "value" : "Hello,"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hallo"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hej,"
-          }
         }
       }
     },
@@ -483,35 +255,14 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "If you're enjoying iBudget and would like to support, consider buying me a coffee."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hvis du liker iBudget og ønsker å støtte utviklingen, kan du vurdere å tilby meg en kaffe."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Gillar du iBudget? Stötta utvecklingen genom att bjuda mig på en kaffe."
+            "value" : "If you're enjoying iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway 😊"
           }
         }
       }
     },
     "If you're enjoyingxxxxxx iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊" : {
       "comment" : "A message encouraging users to support the developer of the app by purchasing a coffee.",
-      "extractionState" : "stale",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hvis du liker iBudget og ønsker å støtte utviklingen, kan du vurdere å tilby meg en kaffe."
-          }
-        }
-      }
+      "isCommentAutoGenerated" : true
     },
     "Income" : {
       "extractionState" : "manual",
@@ -520,18 +271,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Income"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inntekt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inkomst"
           }
         }
       }
@@ -548,32 +287,12 @@
             "state" : "translated",
             "value" : "$"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NOK"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "kr"
-          }
         }
       }
     },
     "Language and Currency" : {
       "comment" : "A label for the section where the user can select their preferred language and currency.",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Språk og valuta"
-          }
-        }
-      }
+      "isCommentAutoGenerated" : true
     },
     "Monthly Income" : {
       "extractionState" : "manual",
@@ -582,18 +301,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monthly Income"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månedlig inntekt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månadsinkomst"
           }
         }
       }
@@ -606,18 +313,6 @@
             "state" : "translated",
             "value" : "Monthly Saved"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månedlig lagret"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månadsspar"
-          }
         }
       }
     },
@@ -629,18 +324,6 @@
             "state" : "translated",
             "value" : "Monthly Spent"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månedlig brukt"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Månadsutgifter"
-          }
         }
       }
     },
@@ -651,18 +334,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Name"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Navn"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Namn"
           }
         }
       }
@@ -679,18 +350,6 @@
             "state" : "translated",
             "value" : "Save"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spare"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spara"
-          }
         }
       }
     },
@@ -701,18 +360,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set your income"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angi inntekten din"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ange din inkomst"
           }
         }
       }
@@ -725,18 +372,6 @@
             "state" : "translated",
             "value" : "Start"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starta"
-          }
         }
       }
     },
@@ -747,18 +382,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Support the Developer"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Støtt utvikleren"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stöd utvecklaren"
           }
         }
       }
@@ -771,18 +394,6 @@
             "state" : "translated",
             "value" : "Warning! You're spending a lot"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Advarsel! Du bruker mye penger"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Observera! Du spenderar mer än vanligt"
-          }
         }
       }
     },
@@ -794,18 +405,6 @@
             "state" : "translated",
             "value" : "Welcome"
           }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Velkomst"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Välkommen"
-          }
         }
       }
     },
@@ -816,18 +415,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yearly Saved"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Årlig lagret"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Årssparande"
           }
         }
       }

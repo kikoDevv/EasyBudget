@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="EasyBudget/en.lproj/InfoPlist.strings" datatype="plaintext" source-language="en" target-language="sv">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="26.2" build-num="17C52"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>EasyBudget</source>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>EasyBudget</source>
+        <note>Bundle name</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="EasyBudget/Localizable.xcstrings" source-language="en" target-language="sv" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="26.2" build-num="17C52"/>
+    </header>
+    <body>
+      <trans-unit id="" xml:space="preserve">
+        <source/>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ %lld %@" xml:space="preserve">
+        <source>%1$@ %2$lld %3$@</source>
+        <note from="auto-generated">A label showing the current amount selected in the slider, along with the currency symbol. The argument is the string “Welcome”, the string “Select Language and Currency”, the string “Start”, the string “Hello,”, the string “Expenses”, the string “Done”, the string “Edit”, the string “Great! You're saving a lot”, the string “Good! You're still saving”, the string “Warning! You're spending a lot”, the string “Danger! You're spending almost everything”, the string “Monthly Income”, the string “Monthly Spent”, the string “Monthly Saved”, the string “Yearly Saved”, the string “Edit your name and income”, the string “Support the Developer”, the string “Email:”, the string “PayPal:”, the string “Swish:”, the string “Cancel”, the string “Save”, or the string “Amount:”.</note>
+      </trans-unit>
+      <trans-unit id="%lld %@" xml:space="preserve">
+        <source>%1$lld %2$@</source>
+        <note from="auto-generated">A text display showing the current income, followed by a slider to adjust it. The value of the slider directly affects the displayed income.</note>
+      </trans-unit>
+      <trans-unit id="%lld kr" xml:space="preserve">
+        <source>%lld $</source>
+        <target state="translated">%lld kr</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld kr :-" xml:space="preserve">
+        <source>%lld $ :-</source>
+        <target state="translated">%lld kr</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="072-4499699" xml:space="preserve">
+        <source>072-4499699</source>
+        <note from="auto-generated">A placeholder for a Swedish mobile payment method (Swish).</note>
+      </trans-unit>
+      <trans-unit id="Amount" xml:space="preserve">
+        <source>Amount</source>
+        <target state="translated">Belopp</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount: %d kr" xml:space="preserve">
+        <source>Amount: %d $</source>
+        <target state="translated">Belopp: %d kr</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount: %lld kr" xml:space="preserve">
+        <source>Amount: %lld $</source>
+        <target state="translated">Belopp: %lld kr</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Cancel" xml:space="preserve">
+        <source>Cancel</source>
+        <target state="translated">avbryt</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Category" xml:space="preserve">
+        <source>Category</source>
+        <target state="translated">Kategori</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Category name" xml:space="preserve">
+        <source>Category name</source>
+        <target state="translated">Kategorinamn</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Danger! You're spending almost everything" xml:space="preserve">
+        <source>Danger! You're spending almost everything</source>
+        <target state="translated">Akut! Du använder nästan allt</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Done" xml:space="preserve">
+        <source>Done</source>
+        <target state="translated">Klart</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Edit" xml:space="preserve">
+        <source>Edit</source>
+        <target state="translated">Redigera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Edit your name and income" xml:space="preserve">
+        <source>Edit your name and income</source>
+        <target state="translated">Redigera ditt namn och inkomst</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Enter amount" xml:space="preserve">
+        <source>Enter amount</source>
+        <target state="translated">Ange belopp</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Enter category" xml:space="preserve">
+        <source>Enter category</source>
+        <target state="translated">Ange kategori</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Enter your name" xml:space="preserve">
+        <source>Enter your name</source>
+        <target state="translated">Ange ditt namn</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Expenses" xml:space="preserve">
+        <source>Expenses</source>
+        <target state="translated">Utgifter</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Good! You're still saving" xml:space="preserve">
+        <source>Good! You're still saving</source>
+        <target state="translated">Toppen! Ditt sparande fortsätter starkt</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Great! You're saving a lot" xml:space="preserve">
+        <source>Great! You're saving a lot</source>
+        <target state="translated">Strålande! Du sparar rejält</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Hello," xml:space="preserve">
+        <source>Hello,</source>
+        <target state="translated">Hej,</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If you're enjoying iBudget and would like to support the development, consider buying me a coffee." xml:space="preserve">
+        <source>If you're enjoying iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway 😊</source>
+        <target state="translated">Gillar du iBudget? Stötta utvecklingen genom att bjuda mig på en kaffe.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If you're enjoyingxxxxxx iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊" xml:space="preserve">
+        <source>If you're enjoyingxxxxxx iBudget and would like to support its development, consider buying me a coffee! The app will always be free anyway😊</source>
+        <note from="auto-generated">A message encouraging users to support the developer of the app by purchasing a coffee.</note>
+      </trans-unit>
+      <trans-unit id="Income" xml:space="preserve">
+        <source>Income</source>
+        <target state="translated">Inkomst</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Language and Currency" xml:space="preserve">
+        <source>Language and Currency</source>
+        <note from="auto-generated">A label for the section where the user can select their preferred language and currency.</note>
+      </trans-unit>
+      <trans-unit id="Monthly Income" xml:space="preserve">
+        <source>Monthly Income</source>
+        <target state="translated">Månadsinkomst</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Monthly Saved" xml:space="preserve">
+        <source>Monthly Saved</source>
+        <target state="translated">Månadsspar</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Monthly Spent" xml:space="preserve">
+        <source>Monthly Spent</source>
+        <target state="translated">Månadsutgifter</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Name" xml:space="preserve">
+        <source>Name</source>
+        <target state="translated">Namn</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Nasrolla.hassani@gmail.com" xml:space="preserve">
+        <source>Nasrolla.hassani@gmail.com</source>
+        <note from="auto-generated">An email address for supporting the developer of the app.</note>
+      </trans-unit>
+      <trans-unit id="Save" xml:space="preserve">
+        <source>Save</source>
+        <target state="translated">Spara</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Set your income" xml:space="preserve">
+        <source>Set your income</source>
+        <target state="translated">Ange din inkomst</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Start" xml:space="preserve">
+        <source>Start</source>
+        <target state="translated">Starta</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Support the Developer" xml:space="preserve">
+        <source>Support the Developer</source>
+        <target state="translated">Stöd utvecklaren</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Warning! You're spending a lot" xml:space="preserve">
+        <source>Warning! You're spending a lot</source>
+        <target state="translated">Observera! Du spenderar mer än vanligt</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Welcome" xml:space="preserve">
+        <source>Welcome</source>
+        <target state="translated">Välkommen</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Yearly Saved" xml:space="preserve">
+        <source>Yearly Saved</source>
+        <target state="translated">Årssparande</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="kiko.devv@gmail.com" xml:space="preserve">
+        <source>kiko.devv@gmail.com</source>
+        <note from="auto-generated">An email address for the developer of the app.</note>
+      </trans-unit>
+      <trans-unit id="kr" xml:space="preserve">
+        <source>$</source>
+        <target state="translated">kr</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="💰" xml:space="preserve">
+        <source>💰</source>
+        <note from="auto-generated">A financial symbol representing money.</note>
+      </trans-unit>
+      <trans-unit id="💸" xml:space="preserve">
+        <source>💸</source>
+        <note from="auto-generated">An emoji representing money.</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

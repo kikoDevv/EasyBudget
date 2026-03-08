@@ -22,6 +22,7 @@
 		241D03A329B072ED0036639A /* iBudget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iBudget.entitlements; sourceTree = "<group>"; };
 		241D03A529B072ED0036639A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		243F1BCC2DBE726200518007 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		244C6EC82F5D9B4500FA117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +55,7 @@
 		241D039C29B072EB0036639A /* EasyBudget */ = {
 			isa = PBXGroup;
 			children = (
+				244C6EC82F5D9B4500FA117D /* Info.plist */,
 				241D039D29B072EB0036639A /* iBudgetApp.swift */,
 				241D039F29B072EB0036639A /* ContentView.swift */,
 				241D03A129B072ED0036639A /* Assets.xcassets */,
@@ -114,6 +116,8 @@
 			knownRegions = (
 				en,
 				Base,
+				nb,
+				sv,
 			);
 			mainGroup = 241D039129B072EA0036639A;
 			productRefGroup = 241D039B29B072EB0036639A /* Products */;
@@ -279,6 +283,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EasyBudget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EasyBudget;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -324,6 +329,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EasyBudget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EasyBudget;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
