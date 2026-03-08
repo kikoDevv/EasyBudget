@@ -7,6 +7,55 @@
 
 import SwiftUI
 
+enum LanguageCurrency: String, CaseIterable, Identifiable {
+    case swedish = "Svenska Kr"
+    case english = "English USD"
+    case norwegian = "Norwegian NOK"
+    case euro = "Euro EUR"
+    
+    var id: String { self.rawValue }
+    
+    var flag: String {
+        switch self {
+        case .swedish: return "🇸🇪"
+        case .english: return "🇺🇸"
+        case .norwegian: return "🇳🇴"
+        case .euro: return "🇪🇺"
+        }
+    }
+    
+    var displayName: String {
+        return "\(flag) \(rawValue)"
+    }
+    
+    var languageCode: String {
+        switch self {
+        case .swedish: return "sv"
+        case .english: return "en"
+        case .norwegian: return "no"
+        case .euro: return "en"
+        }
+    }
+    
+    var currencySymbol: String {
+        switch self {
+        case .swedish: return "kr"
+        case .english: return "$"
+        case .norwegian: return "kr"
+        case .euro: return "€"
+        }
+    }
+    
+    var currencyCode: String {
+        switch self {
+        case .swedish: return "SEK"
+        case .english: return "USD"
+        case .norwegian: return "NOK"
+        case .euro: return "EUR"
+        }
+    }
+}
+
 struct ExpenseCategory: Identifiable, Hashable {
     let id = UUID()
     let name: String
@@ -47,6 +96,13 @@ struct ContentView: View {
     @State private var inputValue = ""
     @State private var animationEffect = false
     @State private var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
+    @State private var selectedLanguageCurrency: LanguageCurrency = {
+        if let savedRawValue = UserDefaults.standard.string(forKey: "languageCurrency"),
+           let saved = LanguageCurrency(rawValue: savedRawValue) {
+            return saved
+        }
+        return .english
+    }()
 
     // MARK: - Computed Properties
     private var totalExpenses: Int {
@@ -68,7 +124,8 @@ struct ContentView: View {
                     income: $income,
                     showMainView: $showMainView,
                     showSecondView: $showSecondView,
-                    userName: $userName
+                    userName: $userName,
+                    selectedLanguageCurrency: $selectedLanguageCurrency
                 )
             } else if showSecondView {
                 BudgetView(
@@ -80,7 +137,8 @@ struct ContentView: View {
                     inputValue: $inputValue,
                     onDelete: deleteExpense,
                     onSave: saveExpense,
-                    userName: $userName
+                    userName: $userName,
+                    selectedLanguageCurrency: $selectedLanguageCurrency
                 )
             }
         }
@@ -112,6 +170,7 @@ struct WelcomeView: View {
     @Binding var showMainView: Bool
     @Binding var showSecondView: Bool
     @Binding var userName: String
+    @Binding var selectedLanguageCurrency: LanguageCurrency
     @State private var animationEffect = false
     @State private var pulseScale: CGFloat = 1.0
     #if os(iOS)
@@ -141,18 +200,17 @@ struct WelcomeView: View {
                 .offset(y: 100)
                 .foregroundColor(Color.black)
 
-            VStack {
+            VStack(spacing: 15) {
                 Text("Welcome")
                     .scaleEffect(animationEffect ? 0 : 1)
                     .font(.largeTitle)
                     .foregroundColor(.white)
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 20)
                 
                 // User input Name prompt --------------
                 CustomTextField(placeholder: "Enter your name", text: $userName)
-                    .frame(width: 250 )
-                    .padding(.horizontal,20)
-                    .padding(.bottom,20)
+                    .frame(width: 250)
+                    .padding(.horizontal, 20)
                     .scaleEffect(animationEffect ? 0 : 1)
                 
                 // User input Income prompt --------------
@@ -172,6 +230,29 @@ struct WelcomeView: View {
                 #if os(iOS)
                 .keyboardType(.numberPad)
                 #endif
+                
+                // Language and Currency Picker --------------
+                VStack(spacing: 8) {
+                    Text("Select Language and Currency")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .bold()
+                    
+                    Picker("Language and Currency", selection: $selectedLanguageCurrency) {
+                        ForEach(LanguageCurrency.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                    #if os(iOS)
+                    .pickerStyle(.wheel)
+                    #else
+                    .pickerStyle(.radioGroup)
+                    #endif
+                    .frame(width: 250, height: 100)
+                    .clipped()
+                }
+                .scaleEffect(animationEffect ? 0 : 1)
+                .padding(.top, 5)
 
                 Button(action: {
                     #if os(iOS)
@@ -181,6 +262,7 @@ struct WelcomeView: View {
                     
                     UserDefaults.standard.set(income, forKey: "inkomst")
                     UserDefaults.standard.set(userName, forKey: "userName")
+                    UserDefaults.standard.set(selectedLanguageCurrency.rawValue, forKey: "languageCurrency")
                     withAnimation {
                         animationEffect = true
                     }
@@ -203,7 +285,7 @@ struct WelcomeView: View {
                 .scaleEffect(animationEffect ? 0 : 1)
                 .disabled(userName.trimmingCharacters(in: .whitespaces).isEmpty || income == 0)
                 .opacity((userName.trimmingCharacters(in: .whitespaces).isEmpty || income == 0) ? 0.6 : 1.0)
-                .padding(.top, 20)
+                .padding(.top, 15)
             }
         }
         .onAppear {
@@ -225,6 +307,7 @@ struct BudgetView: View {
     let onDelete: (IndexSet) -> Void
     let onSave: () -> Void
     @Binding var userName: String
+    @Binding var selectedLanguageCurrency: LanguageCurrency
     @State private var isEditingCategories = false
     @State private var editButtonTimer: Timer?
 
@@ -347,7 +430,8 @@ struct BudgetView: View {
                         EditIncomeSheet(
                             income: $income,
                             userName: $userName,
-                            showEditView: $showEditView
+                            showEditView: $showEditView,
+                            selectedLanguageCurrency: $selectedLanguageCurrency
                         )
                     }
                 }
@@ -524,6 +608,7 @@ struct EditIncomeSheet: View {
     @Binding var income: Float
     @Binding var userName: String
     @Binding var showEditView: Bool
+    @Binding var selectedLanguageCurrency: LanguageCurrency
     #if os(iOS)
     @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     #endif
@@ -539,7 +624,7 @@ struct EditIncomeSheet: View {
                     .padding(.horizontal, 30)
                     .padding(.bottom, 10)
 
-                Text("\(Int(income)) kr :-")
+                Text("\(Int(income)) \(selectedLanguageCurrency.currencySymbol)")
                     .font(.title)
                     .foregroundColor(.green)
 
@@ -551,6 +636,28 @@ struct EditIncomeSheet: View {
                         feedbackGenerator.impactOccurred()
                         #endif
                     }
+
+                // Language and Currency Picker
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Select Language and Currency")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .padding(.horizontal)
+                    
+                    Picker("Language and Currency", selection: $selectedLanguageCurrency) {
+                        ForEach(LanguageCurrency.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                    #if os(iOS)
+                    .pickerStyle(.wheel)
+                    #else
+                    .pickerStyle(.radioGroup)
+                    #endif
+                    .frame(height: 100)
+                    .clipped()
+                }
+                .padding(.vertical, 10)
 
                 Spacer()
 
@@ -626,6 +733,7 @@ struct EditIncomeSheet: View {
                     Button("Save") {
                         UserDefaults.standard.set(income, forKey: "inkomst")
                         UserDefaults.standard.set(userName, forKey: "userName")
+                        UserDefaults.standard.set(selectedLanguageCurrency.rawValue, forKey: "languageCurrency")
                         showEditView = false
                     }
                 }
