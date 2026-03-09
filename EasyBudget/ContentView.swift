@@ -421,6 +421,20 @@ struct BudgetView: View {
                                         .buttonStyle(.borderless)
                                         .padding(.leading, 8)
                                         .transition(.scale.combined(with: .opacity))
+                                        Button(action: {
+                                            #if os(iOS)
+                                            let generator = UIImpactFeedbackGenerator(style: .light)
+                                            generator.impactOccurred()
+                                            #endif
+                                            editingAmountText = String(value)
+                                            editingExpenseKey = key
+                                        }) {
+                                            Image(systemName: "pencil.circle.fill")
+                                                .foregroundColor(.blue)
+                                                .font(.system(size: 22))
+                                        }
+                                        .buttonStyle(.borderless)
+                                        .transition(.scale.combined(with: .opacity))
                                     }
                                 }
                                 .padding(.vertical, 4)
