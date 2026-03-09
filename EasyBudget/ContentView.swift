@@ -633,10 +633,10 @@ struct EditIncomeSheet: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text(localizedString("Edit your name and income", languageCode: selectedLanguageCurrency.languageCode))
+                Text(localizedString("Edit your name and income", languageCode: selectedLanguageCurrency.languageCode,))
                     .font(.headline)
 
-                CustomTextField(placeholder: "Enter your name", text: $userName, languageCode: selectedLanguageCurrency.languageCode)
+                CustomTextField(placeholder: "Enter your name", text: $userName, languageCode: selectedLanguageCurrency.languageCode, labelColor: .gray, borderColor: .white)
                     .frame(width: 200)
                     .padding(.horizontal, 30)
                     .padding(.bottom, 10)
@@ -650,7 +650,7 @@ struct EditIncomeSheet: View {
                             income = 0
                         }
                     }
-                ), suffix: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode)
+                ), suffix: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode, labelColor: .gray, borderColor: .gray)
                 .frame(width: 200)
                 .padding(.horizontal, 30)
                 #if os(iOS)
@@ -658,7 +658,7 @@ struct EditIncomeSheet: View {
                 #endif
 
                 // Language and Currency Picker
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .center, spacing: 8) {
                     Text(localizedString("Language and Currency", languageCode: selectedLanguageCurrency.languageCode))
                         .font(.headline)
                         .foregroundColor(.primary)
@@ -830,7 +830,7 @@ struct AddExpenseSheet: View {
                         if let selected = selectedCategory {
                             VStack(spacing: 14) {
                                 if selected.name == "Other" {
-                                    CustomTextField(placeholder: "Enter category", text: $inputKey, languageCode: languageCode)
+                                    CustomTextField(placeholder: "Enter category", text: $inputKey, languageCode: languageCode, labelColor: .green)
                                         .frame(width: 280)
                                 }
 
@@ -838,7 +838,8 @@ struct AddExpenseSheet: View {
                                     placeholder: "Enter amount",
                                     text: selected.name == "Other" ? $inputValue : $amountText,
                                     suffix: currencySymbol,
-                                    languageCode: languageCode
+                                    languageCode: languageCode,
+                                    labelColor: . green,
                                 )
                                 .frame(width: 280)
                                 #if os(iOS)
@@ -1028,6 +1029,8 @@ struct CustomTextField: View {
     @Binding var text: String
     var suffix: String? = nil
     var languageCode: String? = nil
+    var labelColor: Color = .blue
+    var borderColor: Color = .white
     @FocusState var isTyping: Bool
 
     var body: some View {
@@ -1049,7 +1052,7 @@ struct CustomTextField: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(isTyping ? Color.yellow : Color.white, lineWidth: 1)
+                    .stroke(isTyping ? Color.green : borderColor, lineWidth: 1)
                     .background(Color.gray.opacity(0.5).cornerRadius(10))
             )
 
@@ -1057,7 +1060,7 @@ struct CustomTextField: View {
                 .padding(.horizontal, 5)
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(isTyping || !text.isEmpty ? Color.blue : Color.clear)
+                        .fill(isTyping || !text.isEmpty ? labelColor : Color.clear)
                 )
                 .foregroundStyle(.white)
                 .padding(.leading)
