@@ -357,7 +357,7 @@ struct BudgetView: View {
                             }) {
                                 Image(systemName: "gearshape.fill")
                                     .font(.system(size: 22))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.white)
                                     .frame(width: 40, height: 40)
                                     .background(Color(.systemGray6))
                                     .clipShape(Circle())
@@ -558,7 +558,7 @@ struct BudgetView: View {
                                 .shadow(color: .blue.opacity(0.4), radius: 10, y: 5)
                         }
                         .padding(.trailing, 24)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, 1)
                     }
                 }
             }
@@ -622,7 +622,7 @@ struct BudgetSummaryView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing:0) {
             // Top row: Income & Spent
             HStack(spacing: 12) {
                 StatCardView(
@@ -640,7 +640,7 @@ struct BudgetSummaryView: View {
             }
 
             // Progress bar
-            VStack(spacing: 6) {
+            VStack(spacing: 0) {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
@@ -662,8 +662,10 @@ struct BudgetSummaryView: View {
                     .font(.caption2)
                     .fontWeight(.medium)
                     .foregroundColor(progressBarColor)
+                    .padding(.top, 2)
+                    .padding(.bottom, 1)
             }
-            .padding(.horizontal, 4)
+            .padding(.top, 15)
             .onAppear { animateProgress = true }
 
             // Bottom row: Saved & Yearly
