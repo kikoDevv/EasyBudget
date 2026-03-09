@@ -370,141 +370,152 @@ struct BudgetView: View {
                     }
                     List {
                         BudgetSummaryView(income: income, expenses: expenses, currencySymbol: selectedLanguageCurrency.currencySymbol, languageCode: selectedLanguageCurrency.languageCode)
-                        Section(header:
-                            HStack {
-                                Text(localizedString("Expenses", languageCode: selectedLanguageCurrency.languageCode))
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                if !expenses.isEmpty {
-                                Button(isEditingCategories ? localizedString("Done", languageCode: selectedLanguageCurrency.languageCode) : localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode)) {
+                    }
+                    .frame(height: 220)
+                    #if os(iOS)
+                    .listStyle(.insetGrouped)
+                    .contentMargins(.top, 20)
+                    #endif
+
+
+
+                    // -------------- Expenses header --------------------
+                    HStack {
+                        Text(localizedString("Expenses", languageCode: selectedLanguageCurrency.languageCode))
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        Spacer()
+                        if !expenses.isEmpty {
+                        Button(isEditingCategories ? localizedString("Done", languageCode: selectedLanguageCurrency.languageCode) : localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode)) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                isEditingCategories.toggle()
+                            }
+                            #if os(iOS)
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            #endif
+
+                            // Cancel any existing timer
+                            editButtonTimer?.invalidate()
+
+                            if isEditingCategories {
+                                // Start a new timer to revert after 6 seconds
+                                editButtonTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { _ in
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                        isEditingCategories.toggle()
+                                        isEditingCategories = false
                                     }
                                     #if os(iOS)
                                     let generator = UIImpactFeedbackGenerator(style: .light)
                                     generator.impactOccurred()
                                     #endif
-
-                                    // Cancel any existing timer
-                                    editButtonTimer?.invalidate()
-
-                                    if isEditingCategories {
-                                        // Start a new timer to revert after 6 seconds
-                                        editButtonTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { _ in
-                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                                isEditingCategories = false
-                                            }
-                                            #if os(iOS)
-                                            let generator = UIImpactFeedbackGenerator(style: .light)
-                                            generator.impactOccurred()
-                                            #endif
-                                        }
-                                    }
-                                }
-                                .font(.subheadline)
-                                .foregroundColor(.blue)
                                 }
                             }
-                            .padding(.vertical, 8)
-                        ) {
-                            if expenses.isEmpty {
-                                VStack(spacing: 12) {
-                                    Image(systemName: "tray")
-                                        .font(.system(size: 40))
-                                        .foregroundColor(.gray.opacity(0.5))
-                                    Text(localizedString("No expenses yet", languageCode: selectedLanguageCurrency.languageCode))
-                                        .font(.headline)
-                                        .foregroundColor(.gray)
-                                    Text(localizedString("Tap + to add your first expense", languageCode: selectedLanguageCurrency.languageCode))
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray.opacity(0.7))
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 30)
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                        }
+                    }
+                    .padding(.horizontal, 50)
+                    .padding(.bottom, 10)
+
+                    //------------------ Scrollable expense list -----------
+                    List {
+                        if expenses.isEmpty {
+                            VStack(spacing: 12) {
+                                Image(systemName: "tray")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.gray.opacity(0.5))
+                                Text(localizedString("No expenses yet", languageCode: selectedLanguageCurrency.languageCode))
+                                    .font(.headline)
+                                    .foregroundColor(.gray)
+                                Text(localizedString("Tap + to add your first expense", languageCode: selectedLanguageCurrency.languageCode))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray.opacity(0.7))
                             }
-                            ForEach(expenses.sorted { $0.1 > $1.1 }, id: \.key) { key, value in
-                                HStack(spacing: 12) {
-                                    let parts = key.split(separator: " ", maxSplits: 1)
-                                    if parts.count == 2 {
-                                        ZStack {
-                                            Circle()
-                                                .fill(Color.blue.opacity(0.7))
-                                                .frame(width: 36, height: 36)
-                                            Image(systemName: String(parts[0]))
-                                                .font(.system(size: 15, weight: .medium))
-                                                .foregroundColor(.white)
-                                        }
-                                        Text(localizedString(String(parts[1]), languageCode: selectedLanguageCurrency.languageCode))
-                                            .fontWeight(.medium)
-                                    } else {
-                                        Text(key)
-                                            .fontWeight(.medium)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 30)
+                        }
+                        ForEach(expenses.sorted { $0.1 > $1.1 }, id: \.key) { key, value in
+                            HStack(spacing: 12) {
+                                let parts = key.split(separator: " ", maxSplits: 1)
+                                if parts.count == 2 {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.blue.opacity(0.7))
+                                            .frame(width: 36, height: 36)
+                                        Image(systemName: String(parts[0]))
+                                            .font(.system(size: 15, weight: .medium))
+                                            .foregroundColor(.white)
                                     }
-                                    Spacer()
-                                    Text(formattedAmount(value, currencySymbol: selectedLanguageCurrency.currencySymbol))
-                                        .font(.subheadline)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.secondary)
-                                    if isEditingCategories {
-                                        Button(action: {
-                                            #if os(iOS)
-                                            let generator = UIImpactFeedbackGenerator(style: .medium)
-                                            generator.impactOccurred()
-                                            #endif
-                                            if let index = expenses.sorted(by: { $0.1 > $1.1 }).firstIndex(where: { $0.key == key }) {
-                                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                                    onDelete(IndexSet(integer: index))
-                                                }
-                                            }
-                                        }) {
-                                            Image(systemName: "minus.circle.fill")
-                                                .foregroundColor(.red)
-                                                .font(.system(size: 22))
-                                        }
-                                        .buttonStyle(.borderless)
-                                        .padding(.leading, 8)
-                                        .transition(.scale.combined(with: .opacity))
-                                        Button(action: {
-                                            #if os(iOS)
-                                            let generator = UIImpactFeedbackGenerator(style: .light)
-                                            generator.impactOccurred()
-                                            #endif
-                                            editingAmountText = String(value)
-                                            editingExpenseKey = key
-                                        }) {
-                                            Image(systemName: "pencil.circle.fill")
-                                                .foregroundColor(.blue)
-                                                .font(.system(size: 22))
-                                        }
-                                        .buttonStyle(.borderless)
-                                        .transition(.scale.combined(with: .opacity))
-                                    }
+                                    Text(localizedString(String(parts[1]), languageCode: selectedLanguageCurrency.languageCode))
+                                        .fontWeight(.medium)
+                                } else {
+                                    Text(key)
+                                        .fontWeight(.medium)
                                 }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button(role: .destructive) {
+                                Spacer()
+                                Text(formattedAmount(value, currencySymbol: selectedLanguageCurrency.currencySymbol))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.secondary)
+                                if isEditingCategories {
+                                    Button(action: {
+                                        #if os(iOS)
+                                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                                        generator.impactOccurred()
+                                        #endif
                                         if let index = expenses.sorted(by: { $0.1 > $1.1 }).firstIndex(where: { $0.key == key }) {
-                                            onDelete(IndexSet(integer: index))
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                                onDelete(IndexSet(integer: index))
+                                            }
                                         }
-                                    } label: {
-                                        Label(localizedString("Delete", languageCode: selectedLanguageCurrency.languageCode), systemImage: "trash")
+                                    }) {
+                                        Image(systemName: "minus.circle.fill")
+                                            .foregroundColor(.red)
+                                            .font(.system(size: 22))
                                     }
-                                    Button {
+                                    .buttonStyle(.borderless)
+                                    .padding(.leading, 8)
+                                    .transition(.scale.combined(with: .opacity))
+                                    Button(action: {
+                                        #if os(iOS)
+                                        let generator = UIImpactFeedbackGenerator(style: .light)
+                                        generator.impactOccurred()
+                                        #endif
                                         editingAmountText = String(value)
                                         editingExpenseKey = key
-                                    } label: {
-                                        Label(localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode), systemImage: "pencil")
+                                    }) {
+                                        Image(systemName: "pencil.circle.fill")
+                                            .foregroundColor(.blue)
+                                            .font(.system(size: 22))
                                     }
-                                    .tint(.blue)
+                                    .buttonStyle(.borderless)
+                                    .transition(.scale.combined(with: .opacity))
                                 }
-                                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                             }
-                            .padding(.bottom, 16)
-                            .padding(.top, 16)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    if let index = expenses.sorted(by: { $0.1 > $1.1 }).firstIndex(where: { $0.key == key }) {
+                                        onDelete(IndexSet(integer: index))
+                                    }
+                                } label: {
+                                    Label(localizedString("Delete", languageCode: selectedLanguageCurrency.languageCode), systemImage: "trash")
+                                }
+                                Button {
+                                    editingAmountText = String(value)
+                                    editingExpenseKey = key
+                                } label: {
+                                    Label(localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode), systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                            }
+                            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                         }
+
                     }
                     #if os(iOS)
                     .listStyle(.insetGrouped)
+                    .contentMargins(.top, 0)
                     #endif
                     .sheet(isPresented: $showAddView) {
                         AddExpenseSheet(
@@ -575,7 +586,7 @@ struct BudgetSummaryView: View {
     let currencySymbol: String
     var languageCode: String = "en"
     @State private var animateProgress = false
-    @State private var shimmerOffset: CGFloat = -0.1
+    @State private var shimmerOffset: CGFloat = -0.3
 
     private var totalExpenses: Int {
         expenses.values.reduce(0, +)
