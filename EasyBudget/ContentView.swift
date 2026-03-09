@@ -573,6 +573,7 @@ struct BudgetSummaryView: View {
     let currencySymbol: String
     var languageCode: String = "en"
     @State private var animateProgress = false
+    @State private var shimmerOffset: CGFloat = -0.1
 
     private var totalExpenses: Int {
         expenses.values.reduce(0, +)
@@ -653,7 +654,24 @@ struct BudgetSummaryView: View {
                                                startPoint: .leading, endPoint: .trailing)
                             )
                             .frame(width: geometry.size.width * (animateProgress ? remainingPercentage : 1), height: 8)
-                            .animation(.easeOut(duration: 0.8), value: animateProgress)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(
+                                        LinearGradient(
+                                            stops: [
+                                                .init(color: .clear, location: 0),
+                                                .init(color: .white.opacity(0.5), location: 0.5),
+                                                .init(color: .clear, location: 1)
+                                            ],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                                    .frame(width: 60)
+                                    .offset(x: geometry.size.width * (shimmerOffset - 0.5))
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .animation(.easeOut(duration: 1), value: animateProgress)
                     }
                 }
                 .frame(height: 8)
@@ -666,7 +684,14 @@ struct BudgetSummaryView: View {
                     .padding(.bottom, 1)
             }
             .padding(.top, 15)
-            .onAppear { animateProgress = true }
+            .onAppear {
+                animateProgress = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    withAnimation(Animation.linear(duration: 5).repeatForever(autoreverses: false)) {
+                        shimmerOffset = 1.3
+                    }
+                }
+            }
 
             // Bottom row: Saved & Yearly
             HStack(spacing: 12) {
