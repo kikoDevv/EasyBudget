@@ -359,6 +359,7 @@ struct BudgetView: View {
                                     .font(.headline)
                                     .foregroundColor(.primary)
                                 Spacer()
+                                if !expenses.isEmpty {
                                 Button(isEditingCategories ? localizedString("Done", languageCode: selectedLanguageCurrency.languageCode) : localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode)) {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                         isEditingCategories.toggle()
@@ -386,6 +387,7 @@ struct BudgetView: View {
                                 }
                                 .font(.subheadline)
                                 .foregroundColor(.blue)
+                                }
                             }
                             .padding(.vertical, 8)
                         ) {
