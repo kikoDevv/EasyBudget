@@ -372,8 +372,8 @@ struct BudgetView: View {
                                     editButtonTimer?.invalidate()
 
                                     if isEditingCategories {
-                                        // Start a new timer to revert after 4 seconds
-                                        editButtonTimer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { _ in
+                                        // Start a new timer to revert after 6 seconds
+                                        editButtonTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { _ in
                                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                                 isEditingCategories = false
                                             }
@@ -389,13 +389,28 @@ struct BudgetView: View {
                             }
                             .padding(.vertical, 8)
                         ) {
+                            if expenses.isEmpty {
+                                VStack(spacing: 12) {
+                                    Image(systemName: "tray")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.gray.opacity(0.5))
+                                    Text(localizedString("No expenses yet", languageCode: selectedLanguageCurrency.languageCode))
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                    Text(localizedString("Tap + to add your first expense", languageCode: selectedLanguageCurrency.languageCode))
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray.opacity(0.7))
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 30)
+                            }
                             ForEach(expenses.sorted { $0.1 > $1.1 }, id: \.key) { key, value in
                                 HStack {
                                     let parts = key.split(separator: " ", maxSplits: 1)
                                     if parts.count == 2 {
                                         Image(systemName: String(parts[0]))
                                             .foregroundColor(.blue)
-                                        Text(String(parts[1]))
+                                        Text(localizedString(String(parts[1]), languageCode: selectedLanguageCurrency.languageCode))
                                     } else {
                                         Text(key)
                                     }
@@ -874,7 +889,7 @@ struct EditExpenseSheet: View {
                                 .foregroundColor(.white)
                         }
                     }
-                    Text(displayName)
+                    Text(localizedString(displayName, languageCode: languageCode))
                         .font(.headline)
                         .foregroundColor(.primary)
                 }
@@ -996,7 +1011,7 @@ struct AddExpenseSheet: View {
                         .scaleEffect(appearAnimation ? 1 : 0.5)
                         .opacity(appearAnimation ? 1 : 0)
 
-                        Text(selected.name)
+                        Text(localizedString(selected.name, languageCode: languageCode))
                             .font(.headline)
                             .foregroundColor(.primary)
                     }
@@ -1068,7 +1083,7 @@ struct AddExpenseSheet: View {
                                                               : Color(.systemGray5))
                                                 )
                                                 .foregroundColor(isSelected ? .white : .primary)
-                                            Text(category.name)
+                                            Text(localizedString(category.name, languageCode: languageCode))
                                                 .font(.system(size: 10, weight: .medium))
                                                 .lineLimit(1)
                                                 .foregroundColor(isSelected ? .blue : .secondary)
@@ -1232,7 +1247,7 @@ struct CustomTextField: View {
                 }
             }
             .background(
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: 10)
                     .stroke(isTyping ? Color.green : borderColor, lineWidth: 1)
                     .background(Color.gray.opacity(0.5).cornerRadius(10))
             )
