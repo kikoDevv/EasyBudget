@@ -137,6 +137,7 @@ struct ContentView: View {
                     inputValue: $inputValue,
                     onDelete: deleteExpense,
                     onSave: saveExpense,
+                    onEdit: editExpense,
                     userName: $userName,
                     selectedLanguageCurrency: $selectedLanguageCurrency
                 )
@@ -165,6 +166,11 @@ struct ContentView: View {
             expenses.removeValue(forKey: item.key)
             UserDefaults.standard.set(expenses, forKey: "listan")
         }
+    }
+
+    private func editExpense(key: String, newAmount: Int) {
+        expenses[key] = newAmount
+        UserDefaults.standard.set(expenses, forKey: "listan")
     }
 }
 
@@ -309,10 +315,13 @@ struct BudgetView: View {
     @Binding var inputValue: String
     let onDelete: (IndexSet) -> Void
     let onSave: () -> Void
+    let onEdit: (String, Int) -> Void
     @Binding var userName: String
     @Binding var selectedLanguageCurrency: LanguageCurrency
     @State private var isEditingCategories = false
     @State private var editButtonTimer: Timer?
+    @State private var editingExpenseKey: String? = nil
+    @State private var editingAmountText: String = ""
 
     var body: some View {
         NavigationView {
@@ -414,8 +423,23 @@ struct BudgetView: View {
                                     }
                                 }
                                 .padding(.vertical, 4)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button(role: .destructive) {
+                                        if let index = expenses.sorted(by: { $0.1 > $1.1 }).firstIndex(where: { $0.key == key }) {
+                                            onDelete(IndexSet(integer: index))
+                                        }
+                                    } label: {
+                                        Label(localizedString("Delete", languageCode: selectedLanguageCurrency.languageCode), systemImage: "trash")
+                                    }
+                                    Button {
+                                        editingAmountText = String(value)
+                                        editingExpenseKey = key
+                                    } label: {
+                                        Label(localizedString("Edit", languageCode: selectedLanguageCurrency.languageCode), systemImage: "pencil")
+                                    }
+                                    .tint(.blue)
+                                }
                             }
-                            .onDelete(perform: onDelete)
                         }
                     }
                     #if os(iOS)
@@ -427,6 +451,21 @@ struct BudgetView: View {
                             inputValue: $inputValue,
                             showAddView: $showAddView,
                             onSave: onSave,
+                            currencySymbol: selectedLanguageCurrency.currencySymbol,
+                            languageCode: selectedLanguageCurrency.languageCode
+                        )
+                    }
+                    .sheet(item: $editingExpenseKey) { key in
+                        EditExpenseSheet(
+                            expenseKey: key,
+                            amountText: $editingAmountText,
+                            onSave: { newAmount in
+                                onEdit(key, newAmount)
+                                editingExpenseKey = nil
+                            },
+                            onCancel: {
+                                editingExpenseKey = nil
+                            },
                             currencySymbol: selectedLanguageCurrency.currencySymbol,
                             languageCode: selectedLanguageCurrency.languageCode
                         )
@@ -758,6 +797,124 @@ struct EditIncomeSheet: View {
                     }
                 }
             }
+        }
+        .onTapGesture {
+            #if os(iOS)
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            #endif
+        }
+    }
+}
+
+// MARK: - String Identifiable
+extension String: @retroactive Identifiable {
+    public var id: String { self }
+}
+
+// MARK: - Edit Expense Sheet
+struct EditExpenseSheet: View {
+    let expenseKey: String
+    @Binding var amountText: String
+    let onSave: (Int) -> Void
+    let onCancel: () -> Void
+    let currencySymbol: String
+    let languageCode: String
+
+    private var displayName: String {
+        let parts = expenseKey.split(separator: " ", maxSplits: 1)
+        return parts.count == 2 ? String(parts[1]) : expenseKey
+    }
+
+    private var iconName: String? {
+        let parts = expenseKey.split(separator: " ", maxSplits: 1)
+        return parts.count == 2 ? String(parts[0]) : nil
+    }
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                // Category header
+                VStack(spacing: 8) {
+                    if let icon = iconName {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(colors: [.blue, .blue.opacity(0.6)],
+                                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                                .frame(width: 64, height: 64)
+                                .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
+
+                            Image(systemName: icon)
+                                .font(.system(size: 26, weight: .medium))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    Text(displayName)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                }
+                .padding(.top, 24)
+
+                CustomTextField(
+                    placeholder: "Enter amount",
+                    text: $amountText,
+                    suffix: currencySymbol,
+                    languageCode: languageCode,
+                    labelColor: .green,
+                    borderColor: .green
+                )
+                .frame(width: 280)
+                #if os(iOS)
+                .keyboardType(.numberPad)
+                #endif
+
+                Spacer()
+
+                // Save button
+                VStack(spacing: 0) {
+                    Divider()
+                    Button {
+                        if let value = Int(amountText) {
+                            onSave(value)
+                        }
+                    } label: {
+                        Text(localizedString("Save", languageCode: languageCode))
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: amountText.isEmpty
+                                                ? [Color.gray.opacity(0.4), Color.gray.opacity(0.4)]
+                                                : [Color.blue, Color.blue.opacity(0.8)],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                            )
+                    }
+                    .disabled(amountText.isEmpty)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                }
+            }
+            #if os(iOS)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(localizedString("Cancel", languageCode: languageCode)) {
+                        onCancel()
+                    }
+                    .foregroundColor(.secondary)
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationCornerRadius(43)
+            #endif
         }
         .onTapGesture {
             #if os(iOS)
