@@ -328,22 +328,39 @@ struct BudgetView: View {
             ZStack {
                 VStack(alignment: .leading, spacing: 0) {
                     if !userName.isEmpty {
-                        HStack(alignment: .center) {
-                            VStack(alignment: .leading, spacing: 0) {
+                        HStack(alignment: .center, spacing: 5) {
+                            // Avatar with initials
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(colors: [.blue, .blue.opacity(0.6)],
+                                                       startPoint: .topLeading, endPoint: .bottomTrailing)
+                                    )
+                                    .frame(width: 48, height: 48)
+                                    .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
+                                Text(String(userName.prefix(1)).uppercased())
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text(localizedString("Hello,", languageCode: selectedLanguageCurrency.languageCode))
-                                    .font(.title3)
-                                    .foregroundColor(.gray)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                                 Text(userName)
-                                    .font(.title)
-                                    .bold()
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .fontDesign(.rounded)
                             }
                             Spacer()
                             Button(action: {
                                 showEditView = true
                             }) {
-                                Image(systemName: "person.circle.fill")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.blue)
+                                Image(systemName: "gearshape.fill")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 40, height: 40)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Circle())
                             }
                             .padding(.trailing, 20)
                         }
@@ -407,17 +424,27 @@ struct BudgetView: View {
                                 .padding(.vertical, 30)
                             }
                             ForEach(expenses.sorted { $0.1 > $1.1 }, id: \.key) { key, value in
-                                HStack {
+                                HStack(spacing: 12) {
                                     let parts = key.split(separator: " ", maxSplits: 1)
                                     if parts.count == 2 {
-                                        Image(systemName: String(parts[0]))
-                                            .foregroundColor(.blue)
+                                        ZStack {
+                                            Circle()
+                                                .fill(Color.blue.opacity(0.12))
+                                                .frame(width: 36, height: 36)
+                                            Image(systemName: String(parts[0]))
+                                                .font(.system(size: 15, weight: .medium))
+                                                .foregroundColor(.blue)
+                                        }
                                         Text(localizedString(String(parts[1]), languageCode: selectedLanguageCurrency.languageCode))
+                                            .fontWeight(.medium)
                                     } else {
                                         Text(key)
+                                            .fontWeight(.medium)
                                     }
                                     Spacer()
-                                    Text("\(value) \(selectedLanguageCurrency.currencySymbol)")
+                                    Text(formattedAmount(value, currencySymbol: selectedLanguageCurrency.currencySymbol))
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
                                         .foregroundColor(.secondary)
                                     if isEditingCategories {
                                         Button(action: {
@@ -520,14 +547,18 @@ struct BudgetView: View {
                             showAddView = true
                         }) {
                             Image(systemName: "plus")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 22, weight: .bold))
                                 .foregroundColor(.white)
-                                .frame(width: 45, height: 45)
-                                .background(Color.blue)
+                                .frame(width: 56, height: 56)
+                                .background(
+                                    LinearGradient(colors: [.blue, .blue.opacity(0.75)],
+                                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
                                 .clipShape(Circle())
-                                .shadow(radius: 8, y: 4)
+                                .shadow(color: .blue.opacity(0.4), radius: 10, y: 5)
                         }
-                        .padding(.trailing, 20)
+                        .padding(.trailing, 24)
+                        .padding(.bottom, 8)
                     }
                 }
             }
@@ -591,102 +622,65 @@ struct BudgetSummaryView: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(localizedString("Monthly Income", languageCode: languageCode))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 25)
-                    Label {
-                        Text(formattedAmount(Int(income), currencySymbol: currencySymbol))
-                    } icon: {
-                        Image("money-icons/take-money")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                    }
-                    .labelStyle(IconOnlyLabelStyle())
-                }
-                Spacer()
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(localizedString("Monthly Spent", languageCode: languageCode))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 25)
-                    Label {
-                        Text(formattedAmount(totalExpenses, currencySymbol: currencySymbol))
-                    } icon: {
-                        Image("money-icons/money-out")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                    }
-                    .labelStyle(IconOnlyLabelStyle())
-                }
+        VStack(spacing: 12) {
+            // Top row: Income & Spent
+            HStack(spacing: 12) {
+                StatCardView(
+                    title: localizedString("Monthly Income", languageCode: languageCode),
+                    amount: formattedAmount(Int(income), currencySymbol: currencySymbol),
+                    iconImage: "money-icons/take-money",
+                    amountColor: .primary
+                )
+                StatCardView(
+                    title: localizedString("Monthly Spent", languageCode: languageCode),
+                    amount: formattedAmount(totalExpenses, currencySymbol: currencySymbol),
+                    iconImage: "money-icons/money-out",
+                    amountColor: .primary
+                )
             }
-            .font(.title3)
-            .padding(.bottom, 4)
 
-            GeometryReader { geometry in
-                VStack(spacing: 4) {
+            // Progress bar
+            VStack(spacing: 6) {
+                GeometryReader { geometry in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20)
-                            .frame(height: 10)
-                            .foregroundColor(.white)
+                            .frame(height: 8)
+                            .foregroundColor(Color(.systemGray5))
 
                         RoundedRectangle(cornerRadius: 20)
-                            .frame(width: geometry.size.width * (animateProgress ? remainingPercentage : 1), height: 10)
-                            .foregroundColor(progressBarColor)
+                            .fill(
+                                LinearGradient(colors: [progressBarColor, progressBarColor.opacity(0.7)],
+                                               startPoint: .leading, endPoint: .trailing)
+                            )
+                            .frame(width: geometry.size.width * (animateProgress ? remainingPercentage : 1), height: 8)
                             .animation(.easeOut(duration: 0.8), value: animateProgress)
                     }
-
-                    Text(progressBarText)
-                        .font(.caption)
-                        .foregroundColor(progressBarColor)
                 }
+                .frame(height: 8)
+
+                Text(progressBarText)
+                    .font(.caption2)
+                    .fontWeight(.medium)
+                    .foregroundColor(progressBarColor)
             }
-            .frame(height: 30)
-            .padding(.vertical, 5)
+            .padding(.horizontal, 4)
             .onAppear { animateProgress = true }
 
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(localizedString("Monthly Saved", languageCode: languageCode))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 25)
-                    Label {
-                        Text(formattedAmount(savings, currencySymbol: currencySymbol))
-                            .foregroundColor(savings >= 0 ? .green : .red)
-                    } icon: {
-                        Image("money-icons/money-sedlar")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                    }
-                    .labelStyle(IconOnlyLabelStyle())
-                }
-                Spacer()
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(localizedString("Yearly Saved", languageCode: languageCode))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.leading, 25)
-                    Label {
-                        Text(formattedAmount(yearlySavings, currencySymbol: currencySymbol))
-                            .foregroundColor(yearlySavings >= 0 ? .green : .red)
-                    } icon: {
-                        Image("money-icons/money")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22)
-                    }
-                    .labelStyle(IconOnlyLabelStyle())
-                }
+            // Bottom row: Saved & Yearly
+            HStack(spacing: 12) {
+                StatCardView(
+                    title: localizedString("Monthly Saved", languageCode: languageCode),
+                    amount: formattedAmount(savings, currencySymbol: currencySymbol),
+                    iconImage: "money-icons/money-sedlar",
+                    amountColor: savings >= 0 ? .green : .red
+                )
+                StatCardView(
+                    title: localizedString("Yearly Saved", languageCode: languageCode),
+                    amount: formattedAmount(yearlySavings, currencySymbol: currencySymbol),
+                    iconImage: "money-icons/money",
+                    amountColor: yearlySavings >= 0 ? .green : .red
+                )
             }
-            .font(.title3)
-            .padding(.top, 4)
         }
     }
 }
@@ -697,6 +691,43 @@ struct IconOnlyLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
+    }
+}
+
+// MARK: - Stat Card View
+struct StatCardView: View {
+    let title: String
+    let amount: String
+    let iconImage: String
+    var amountColor: Color = .primary
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(iconImage)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 28, height: 28)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+                Text(amount)
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
+                    .foregroundColor(amountColor)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color(.systemBackground))
+                .shadow(color: Color.black.opacity(0.06), radius: 6, y: 3)
+        )
     }
 }
 
