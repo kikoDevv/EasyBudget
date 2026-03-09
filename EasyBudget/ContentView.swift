@@ -88,8 +88,16 @@ struct ContentView: View {
     // MARK: - State Variables
     @State private var expenses = UserDefaults.standard.object(forKey: "listan") as? [String:Int] ?? [String:Int]()
     @State private var income: Float = UserDefaults.standard.float(forKey: "inkomst")
-    @State private var showMainView = true
-    @State private var showSecondView = false
+    @State private var showMainView: Bool = {
+        let name = UserDefaults.standard.string(forKey: "userName") ?? ""
+        let income = UserDefaults.standard.float(forKey: "inkomst")
+        return name.trimmingCharacters(in: .whitespaces).isEmpty || income == 0
+    }()
+    @State private var showSecondView: Bool = {
+        let name = UserDefaults.standard.string(forKey: "userName") ?? ""
+        let income = UserDefaults.standard.float(forKey: "inkomst")
+        return !(name.trimmingCharacters(in: .whitespaces).isEmpty || income == 0)
+    }()
     @State private var showEditView = false
     @State private var showAddView = false
     @State private var inputKey = ""
@@ -509,7 +517,7 @@ struct BudgetView: View {
                                 }
                                 .tint(.blue)
                             }
-                            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                            .listRowInsets(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
                         }
 
                     }
