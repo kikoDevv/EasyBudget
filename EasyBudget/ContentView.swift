@@ -429,11 +429,11 @@ struct BudgetView: View {
                                     if parts.count == 2 {
                                         ZStack {
                                             Circle()
-                                                .fill(Color.blue.opacity(0.12))
+                                                .fill(Color.blue.opacity(0.7))
                                                 .frame(width: 36, height: 36)
                                             Image(systemName: String(parts[0]))
                                                 .font(.system(size: 15, weight: .medium))
-                                                .foregroundColor(.blue)
+                                                .foregroundColor(.white)
                                         }
                                         Text(localizedString(String(parts[1]), languageCode: selectedLanguageCurrency.languageCode))
                                             .fontWeight(.medium)
@@ -481,7 +481,6 @@ struct BudgetView: View {
                                         .transition(.scale.combined(with: .opacity))
                                     }
                                 }
-                                .padding(.vertical, 4)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button(role: .destructive) {
                                         if let index = expenses.sorted(by: { $0.1 > $1.1 }).firstIndex(where: { $0.key == key }) {
@@ -498,7 +497,10 @@ struct BudgetView: View {
                                     }
                                     .tint(.blue)
                                 }
+                                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                             }
+                            .padding(.bottom, 16)
+                            .padding(.top, 16)
                         }
                     }
                     #if os(iOS)
