@@ -418,6 +418,7 @@ struct BudgetView: View {
                                                 .foregroundColor(.red)
                                                 .font(.system(size: 22))
                                         }
+                                        .buttonStyle(.borderless)
                                         .padding(.leading, 8)
                                         .transition(.scale.combined(with: .opacity))
                                     }
@@ -500,11 +501,6 @@ struct BudgetView: View {
                 }
             }
         }
-        .onTapGesture {
-            #if os(iOS)
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            #endif
-        }
     }
 }
 
@@ -531,6 +527,10 @@ struct BudgetSummaryView: View {
     private var spendingPercentage: Double {
         guard income > 0 else { return 0 }
         return Double(totalExpenses) / Double(income)
+    }
+
+    private var remainingPercentage: Double {
+        max(1 - spendingPercentage, 0)
     }
 
     private var progressBarColor: Color {
@@ -570,8 +570,10 @@ struct BudgetSummaryView: View {
                     Label {
                         Text(formattedAmount(Int(income), currencySymbol: currencySymbol))
                     } icon: {
-                        Image(systemName: "arrow.down.circle.fill")
-                            .foregroundColor(.green)
+                        Image("money-icons/take-money")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
                     }
                     .labelStyle(IconOnlyLabelStyle())
                 }
@@ -584,7 +586,10 @@ struct BudgetSummaryView: View {
                     Label {
                         Text(formattedAmount(totalExpenses, currencySymbol: currencySymbol))
                     } icon: {
-                        Text("💸")
+                        Image("money-icons/money-out")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
                     }
                     .labelStyle(IconOnlyLabelStyle())
                 }
@@ -600,7 +605,7 @@ struct BudgetSummaryView: View {
                             .foregroundColor(.white)
 
                         RoundedRectangle(cornerRadius: 20)
-                            .frame(width: geometry.size.width * (animateProgress ? min(spendingPercentage, 1) : 0), height: 10)
+                            .frame(width: geometry.size.width * (animateProgress ? remainingPercentage : 1), height: 10)
                             .foregroundColor(progressBarColor)
                             .animation(.easeOut(duration: 0.8), value: animateProgress)
                     }
@@ -624,7 +629,10 @@ struct BudgetSummaryView: View {
                         Text(formattedAmount(savings, currencySymbol: currencySymbol))
                             .foregroundColor(savings >= 0 ? .green : .red)
                     } icon: {
-                        Text("💰")
+                        Image("money-icons/money-sedlar")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
                     }
                     .labelStyle(IconOnlyLabelStyle())
                 }
@@ -638,8 +646,10 @@ struct BudgetSummaryView: View {
                         Text(formattedAmount(yearlySavings, currencySymbol: currencySymbol))
                             .foregroundColor(yearlySavings >= 0 ? .green : .red)
                     } icon: {
-                        Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
-                            .foregroundColor(.purple)
+                        Image("money-icons/money")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
                     }
                     .labelStyle(IconOnlyLabelStyle())
                 }
