@@ -730,6 +730,7 @@ struct BudgetSummaryView: View {
                 )
             }
         }
+        .frame(height:150)
     }
 }
 
