@@ -1123,9 +1123,9 @@ struct AddExpenseSheet: View {
                                 #if os(iOS)
                                 .keyboardType(.numberPad)
                                 #endif
-                                .onChange(of: amountText) { newValue in
+                                .onChange(of: amountText) {
                                     if selected.name != "Other" {
-                                        inputValue = newValue
+                                        inputValue = amountText
                                     }
                                 }
                             }
