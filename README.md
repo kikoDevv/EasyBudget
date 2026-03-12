@@ -10,11 +10,9 @@
   <h2>Screen shot from app store</h2>
 </div>
 
-| Main View                                                                                     | Expenses                                                                                     | Categories                                                                                     | Settings                                                                                     | Statistics                                                                                     |
+| Welcome view                                                                                     | Main view                                                                                     | Categories                                                                                     | Expenses view                                                                                     | Edite view                                                                                     |
 | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| ![Main View](https://github.com/user-attachments/assets/a3078657-2ac0-4a14-b99e-36be5a2556d2) | ![Expenses](https://github.com/user-attachments/assets/1759d54d-e50f-4954-b858-83881c2f3782) | ![Categories](https://github.com/user-attachments/assets/aaa1d71a-5f9d-4197-bc71-5cfa0da3b081) | ![Settings](https://github.com/user-attachments/assets/ebc96594-bcd3-4c8b-bdef-2608d1b4f52f) | ![Statistics](https://github.com/user-attachments/assets/705f3af2-32da-420c-b6dc-2ab9dc3e6c28) |
-
-
+| ![Welcome view](https://github.com/user-attachments/assets/a3078657-2ac0-4a14-b99e-36be5a2556d2) | ![Main view](https://github.com/user-attachments/assets/ddd28121-3fb5-40db-9347-0f74349ac17f) | ![Categories](https://github.com/user-attachments/assets/3c5e00f5-6cfe-4a79-998b-f3ac2492bb7c) | ![Expenses view](https://github.com/user-attachments/assets/9d87efa4-f8a4-4622-955d-06c02b6710c9) | ![Statistics](https://github.com/user-attachments/assets/677ef6a4-2e56-4f0e-addc-e9f9685057ab) |
 
 
 
