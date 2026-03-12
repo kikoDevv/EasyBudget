@@ -2,11 +2,13 @@
   <a href="https://apps.apple.com/se/app/easybudget/id6446150580?l=en-GB">
     <img src="budgetIconRounded.png" width="100" height="100" style="filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));">
   </a>
-  <h2>Follow Manager for GitHub</h2>
-  <p>Manage your GitHub followers effortlessly with no extra coding, no servers setup, no hassle. Just enter your token and start manage your list with simple UI.</p>
+  <h2>EasyBudget</h2>
+  <p>Your finances at a glance. Set your income, track expenses, and watch your savings grow all in a beautiful</p>
 </div>
 
-## Screenshots
+<div align="center">
+  <h2>Screen shot from app store</h2>
+</div>
 
 | Main View                                                                                     | Expenses                                                                                     | Categories                                                                                     | Settings                                                                                     | Statistics                                                                                     |
 | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
